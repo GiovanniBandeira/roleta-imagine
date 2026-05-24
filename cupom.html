@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Meu Cupom – Imagine</title>
+<meta name="description" content="Seu cupom exclusivo da Imagine">
+<meta name="theme-color" content="#050510">
+<!-- PWA: permite "Adicionar à tela inicial" no iOS/Android -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--bg:#050510;--purple:#a855f7;--cyan:#00d4ff;--gold:#fbbf24;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 2rem;}
+
+/* STARS */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.8}}
+
+.page{position:relative;z-index:1;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:1rem;}
+
+/* LOGO */
+.logo{font-size:1.3rem;font-weight:900;background:linear-gradient(90deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.25rem;}
+
+/* SAVE BANNER — shown immediately on mobile */
+#save-banner{width:100%;background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,212,255,.2));border:1px solid rgba(168,85,247,.4);border-radius:16px;padding:1rem 1.25rem;text-align:center;display:none;}
+#save-banner p{font-size:.9rem;color:rgba(255,255,255,.7);margin-bottom:.75rem;}
+#auto-save-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:800;color:#fff;cursor:pointer;box-shadow:0 0 20px rgba(168,85,247,.5);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(168,85,247,.5)}50%{box-shadow:0 0 35px rgba(168,85,247,.9)}}
+
+/* TICKET */
+#ticket{width:100%;background:linear-gradient(145deg,#0a0a1f,#12062a);border:1px solid rgba(168,85,247,.4);border-radius:20px;overflow:hidden;}
+.ticket-header{background:linear-gradient(135deg,var(--purple),var(--cyan));padding:1.1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;}
+.t-logo{font-size:1.25rem;font-weight:900;color:#fff;letter-spacing:.05em;}
+.t-badge{background:rgba(255,255,255,.2);padding:.25rem .75rem;border-radius:20px;font-size:.72rem;font-weight:700;color:#fff;}
+.ticket-body{padding:1.25rem;}
+.prize-icon{font-size:3rem;text-align:center;display:block;animation:float 2s ease-in-out infinite alternate;}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+.prize-name{text-align:center;font-size:1.5rem;font-weight:900;background:linear-gradient(90deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:.4rem 0 .75rem;}
+.divider{border:none;border-top:2px dashed rgba(255,255,255,.1);margin:.75rem 0;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;}
+.info-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;}
+.info-value{font-size:.9rem;font-weight:700;}
+.coupon-id{font-size:1.3rem;letter-spacing:.1em;color:var(--gold);font-weight:900;}
+.status-ok{background:rgba(0,212,255,.1);border:1px solid var(--cyan);color:var(--cyan);padding:.2rem .7rem;border-radius:20px;font-size:.75rem;font-weight:700;}
+.status-used{background:rgba(255,100,100,.1);border:1px solid #ff6464;color:#ff6464;padding:.2rem .7rem;border-radius:20px;font-size:.75rem;font-weight:700;}
+.ticket-footer{background:rgba(168,85,247,.06);padding:.6rem 1.25rem;text-align:center;font-size:.65rem;color:rgba(255,255,255,.3);line-height:1.5;}
+
+/* ACTIONS */
+.actions{width:100%;display:flex;flex-direction:column;gap:.6rem;}
+.btn{width:100%;padding:.85rem;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;box-shadow:0 0 20px rgba(168,85,247,.4);}
+.btn-wa{background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.35);color:#25d366;}
+.btn-sec{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);}
+
+/* LOADING */
+#loading{padding:3rem 1rem;text-align:center;color:rgba(255,255,255,.5);font-size:1rem;}
+.spinner{display:inline-block;width:32px;height:32px;border:3px solid rgba(168,85,247,.3);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:1rem;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HINT */
+.hint{font-size:.78rem;color:rgba(255,255,255,.3);text-align:center;line-height:1.6;}
+.hint b{color:rgba(255,255,255,.5);}
+
+/* ERROR */
+#error{padding:2rem;text-align:center;}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="page">
+  <span class="logo">✦ IMAGINE</span>
+
+  <!-- SAVE BANNER (mobile only) -->
+  <div id="save-banner">
+    <p>📲 Salve seu cupom agora para usar na loja!</p>
+    <button id="auto-save-btn" onclick="saveImage()">📥 SALVAR CUPOM NA GALERIA</button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="spinner"></div><br>Carregando cupom...
+  </div>
+
+  <!-- TICKET -->
+  <div id="ticket" style="display:none;">
+    <div class="ticket-header">
+      <span class="t-logo">✦ IMAGINE</span>
+      <span class="t-badge" id="t-badge">CUPOM VÁLIDO</span>
+    </div>
+    <div class="ticket-body">
+      <span class="prize-icon" id="t-icon"></span>
+      <div class="prize-name" id="t-prize"></div>
+      <div class="divider"></div>
+      <div class="info-row">
+        <span class="info-label">Código</span>
+        <span class="info-value coupon-id" id="t-id"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Emitido em</span>
+        <span class="info-value" id="t-date"></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status</span>
+        <span id="t-status" class="info-value status-ok">● ATIVO</span>
+      </div>
+    </div>
+    <div class="ticket-footer">
+      Imagine • Apresente este cupom na loja para resgatar seu prêmio • Uso único
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions" id="actions" style="display:none;">
+    <button class="btn btn-primary" id="saveBtn" onclick="saveImage()">📥 Salvar Imagem na Galeria</button>
+    <button class="btn btn-wa" onclick="shareWhatsApp()">📤 Enviar pelo WhatsApp</button>
+    <button class="btn btn-sec" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+  </div>
+
+  <p class="hint" id="hint" style="display:none;">
+    💡 Salve a imagem e apresente na loja.<br>
+    Código de resgate: <b id="hint-id"></b>
+  </p>
+
+  <div id="error" style="display:none;"></div>
+</div>
+
+<script>
+const ICONS   = { desconto10:'🏷️', chaveiro:'🔑', desconto50:'⭐' };
+const CONFIG  = { APPS_SCRIPT_URL: 'SUA_URL_DO_APPS_SCRIPT_AQUI' };
+
+// Stars
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='star';
+    const z=Math.random()*2+.5;
+    s.style.cssText=`width:${z}px;height:${z}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;opacity:${Math.random()*.35+.08}`;
+    c.appendChild(s);
+  }
+})();
+
+const params   = new URLSearchParams(window.location.search);
+const couponId = params.get('id');
+const prize    = params.get('prize');
+const label    = params.get('label');
+const dateISO  = params.get('date');
+
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+if(!couponId){
+  showError('❌ Link inválido. Peça um novo cupom.');
+} else {
+  // Show immediately from URL params (offline-ready)
+  renderTicket({ id:couponId, prize:prize||'desconto10', prizeLabel:label||'Prêmio Imagine', date:dateISO||new Date().toISOString(), status:'ATIVO' });
+
+  // Verify with Sheets if configured
+  if(CONFIG.APPS_SCRIPT_URL && !CONFIG.APPS_SCRIPT_URL.includes('SUA_URL')){
+    fetch(`${CONFIG.APPS_SCRIPT_URL}?action=get&id=${encodeURIComponent(couponId)}`)
+      .then(r=>r.json())
+      .then(d=>{ if(!d.error) renderTicket(d); })
+      .catch(()=>{});
+  }
+}
+
+function renderTicket(c){
+  const isUsed = c.status === 'USADO';
+  const icon   = ICONS[c.prize] || '🎁';
+  const date   = c.date ? new Date(c.date).toLocaleDateString('pt-BR') : '—';
+
+  document.getElementById('t-icon').textContent    = icon;
+  document.getElementById('t-prize').textContent   = c.prizeLabel || c.label || c.prize;
+  document.getElementById('t-id').textContent      = c.id;
+  document.getElementById('t-date').textContent    = date;
+  document.getElementById('hint-id').textContent   = c.id;
+
+  const statusEl = document.getElementById('t-status');
+  const badgeEl  = document.getElementById('t-badge');
+
+  if(isUsed){
+    statusEl.textContent = '✕ UTILIZADO';
+    statusEl.className   = 'info-value status-used';
+    badgeEl.textContent  = 'CUPOM UTILIZADO';
+    badgeEl.style.background = 'rgba(255,100,100,.3)';
+    document.getElementById('actions').style.display  = 'none';
+    document.getElementById('save-banner').style.display = 'none';
+  } else {
+    statusEl.textContent = '● ATIVO';
+    statusEl.className   = 'info-value status-ok';
+    document.getElementById('actions').style.display = 'flex';
+    if(isMobile) document.getElementById('save-banner').style.display = 'block';
+  }
+
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('ticket').style.display  = 'block';
+  document.getElementById('hint').style.display    = 'block';
+}
+
+async function saveImage(){
+  const saveBtn = document.getElementById('saveBtn');
+  const autoBtn = document.getElementById('auto-save-btn');
+  if(saveBtn) { saveBtn.disabled=true; saveBtn.textContent='⏳ Gerando...'; }
+  if(autoBtn) { autoBtn.disabled=true; autoBtn.textContent='⏳ Gerando...'; }
+
+  try{
+    const ticket = document.getElementById('ticket');
+    // Hide animated elements before capture
+    ticket.style.animation = 'none';
+    document.querySelectorAll('.prize-icon').forEach(el=>el.style.animation='none');
+
+    const canvas = await html2canvas(ticket,{
+      backgroundColor:'#0a0a1f', scale:3, useCORS:true, logging:false,
+      ignoreElements: el => el.id==='stars'
+    });
+
+    // Try Web Share API with file (saves to gallery on Android/iOS)
+    if(navigator.canShare && navigator.share){
+      canvas.toBlob(async blob=>{
+        const file = new File([blob],`cupom-imagine-${couponId}.png`,{type:'image/png'});
+        if(navigator.canShare({files:[file]})){
+          try{
+            await navigator.share({ files:[file], title:'Meu Cupom Imagine', text:`Código: ${couponId}` });
+            return;
+          }catch(e){ if(e.name!=='AbortError') fallbackDownload(canvas); }
+        } else { fallbackDownload(canvas); }
+      },'image/png');
+    } else {
+      fallbackDownload(canvas);
+    }
+  } catch(e){
+    alert('Erro ao gerar imagem. Tire um print da tela como alternativa.');
+  } finally {
+    if(saveBtn){ saveBtn.disabled=false; saveBtn.textContent='📥 Salvar Imagem na Galeria'; }
+    if(autoBtn){ autoBtn.disabled=false; autoBtn.textContent='📥 SALVAR CUPOM NA GALERIA'; }
+  }
+}
+
+function fallbackDownload(canvas){
+  const link = document.createElement('a');
+  link.download = `cupom-imagine-${couponId}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function shareWhatsApp(){
+  const prizeText = document.getElementById('t-prize').textContent;
+  const msg = `🎉 Ganhei "${prizeText}" na Roleta da Imagine!\nMeu código: ${couponId}\nVer cupom: ${window.location.href}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function showError(msg){
+  document.getElementById('loading').style.display='none';
+  const el = document.getElementById('error');
+  el.style.display='block';
+  el.innerHTML=`<p style="color:rgba(255,255,255,.5);font-size:.95rem;">${msg}</p>`;
+}
+</script>
+</body>
+</html>

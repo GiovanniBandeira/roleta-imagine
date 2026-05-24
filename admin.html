@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Validar Cupom | Imagine</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050510;--purple:#a855f7;--cyan:#00d4ff;--gold:#fbbf24;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+.card{background:linear-gradient(145deg,#0d0d2b,#12062a);border:1px solid rgba(168,85,247,.3);border-radius:24px;padding:2rem;max-width:460px;width:100%;}
+h1{font-size:1.4rem;font-weight:800;background:linear-gradient(90deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.25rem;}
+.subtitle{color:rgba(255,255,255,.4);font-size:.85rem;margin-bottom:1.5rem;}
+.field{margin-bottom:1rem;}
+label{display:block;font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;}
+input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.85rem 1rem;color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;outline:none;transition:.2s;}
+input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(168,85,247,.2);}
+.btn{width:100%;padding:1rem;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.2s;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;margin-top:.5rem;}
+.btn:hover{transform:scale(1.02);box-shadow:0 0 25px rgba(168,85,247,.5);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);}
+.result-box{margin-top:1.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;display:none;}
+.result-box.visible{display:block;}
+.status-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1.2rem;border-radius:50px;font-weight:700;font-size:.9rem;margin-bottom:1rem;}
+.active{background:rgba(0,212,255,.1);border:2px solid var(--cyan);color:var(--cyan);}
+.used{background:rgba(255,100,100,.1);border:2px solid #ff6464;color:#ff6464;}
+.meta{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.9rem;border-bottom:1px solid rgba(255,255,255,.05);}
+.meta:last-child{border-bottom:none;}
+.meta-label{color:rgba(255,255,255,.4);}
+.meta-value{font-weight:700;}
+.msg{margin-top:1rem;padding:.75rem 1rem;border-radius:12px;font-size:.9rem;display:none;}
+.msg.visible{display:block;}
+.msg.success{background:rgba(0,212,255,.1);border:1px solid var(--cyan);color:var(--cyan);}
+.msg.error{background:rgba(255,100,100,.1);border:1px solid #ff6464;color:#ff6464;}
+#loginSection{display:block;}#mainSection{display:none;}
+.logo-text{font-size:1.4rem;font-weight:900;background:linear-gradient(90deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;text-align:center;margin-bottom:1.5rem;}
+</style>
+</head>
+<body>
+<div class="card">
+  <span class="logo-text">✦ IMAGINE – Admin</span>
+
+  <!-- LOGIN -->
+  <div id="loginSection">
+    <h1>🔐 Acesso Restrito</h1>
+    <p class="subtitle">Área exclusiva para validação de cupons</p>
+    <div class="field">
+      <label>Senha administrativa</label>
+      <input type="password" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn" onclick="doLogin()">Entrar</button>
+    <div class="msg" id="loginMsg"></div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="mainSection">
+    <h1>🎟️ Validar Cupom</h1>
+    <p class="subtitle">Busque o cupom pelo código ou escaneie o QR Code</p>
+    <div class="field">
+      <label>Código do Cupom</label>
+      <input type="text" id="couponInput" placeholder="#XXXXXX" style="text-transform:uppercase;" onkeydown="if(event.key==='Enter')searchCoupon()">
+    </div>
+    <button class="btn" id="searchBtn" onclick="searchCoupon()">🔍 Buscar Cupom</button>
+
+    <div class="result-box" id="resultBox">
+      <div id="statusBadge" class="status-badge"></div>
+      <div id="couponDetails"></div>
+      <button class="btn btn-danger" id="useBtn" onclick="useCoupon()" style="margin-top:1rem;display:none;">✓ Marcar Como Utilizado</button>
+    </div>
+    <div class="msg" id="actionMsg"></div>
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:1.5rem 0;">
+    <button class="btn" onclick="logout()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);">Sair</button>
+  </div>
+</div>
+
+<script>
+const CONFIG = {
+  APPS_SCRIPT_URL: 'SUA_URL_DO_APPS_SCRIPT_AQUI',
+  ADMIN_PASSWORD: 'imagine2024', // Mude para sua senha
+};
+
+const PRIZE_ICONS = { desconto10:'🏷️', chaveiro:'🔑', desconto50:'⭐' };
+let currentCoupon = null;
+
+function doLogin(){
+  const pass = document.getElementById('adminPass').value;
+  const msg = document.getElementById('loginMsg');
+  if(pass === CONFIG.ADMIN_PASSWORD){
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('mainSection').style.display = 'block';
+    showMsg(msg,'','');
+  } else {
+    showMsg(msg,'error','❌ Senha incorreta');
+  }
+}
+
+function logout(){
+  document.getElementById('loginSection').style.display = 'block';
+  document.getElementById('mainSection').style.display = 'none';
+  document.getElementById('adminPass').value = '';
+  document.getElementById('resultBox').classList.remove('visible');
+}
+
+async function searchCoupon(){
+  const id = document.getElementById('couponInput').value.trim().toUpperCase();
+  if(!id){ alert('Digite o código do cupom'); return; }
+
+  const btn = document.getElementById('searchBtn');
+  btn.disabled = true; btn.textContent = '⏳ Buscando...';
+
+  const resultBox = document.getElementById('resultBox');
+  const actionMsg = document.getElementById('actionMsg');
+  showMsg(actionMsg,'','');
+
+  try {
+    let data;
+    if(CONFIG.APPS_SCRIPT_URL === 'SUA_URL_DO_APPS_SCRIPT_AQUI'){
+      // Demo mode
+      data = { id, prize:'desconto10', prizeLabel:'10% de Desconto', date: new Date().toISOString(), status:'ATIVO' };
+    } else {
+      const res = await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=get&id=${encodeURIComponent(id)}`);
+      data = await res.json();
+    }
+
+    if(data.error){ showError(data.error); }
+    else { showResult(data); }
+  } catch(e){ showError('Erro de conexão com o servidor.'); }
+
+  btn.disabled = false; btn.textContent = '🔍 Buscar Cupom';
+}
+
+function showResult(c){
+  currentCoupon = c;
+  const isUsed = c.status === 'USADO';
+  const icon = PRIZE_ICONS[c.prize] || '🎁';
+  const badge = document.getElementById('statusBadge');
+  badge.className = 'status-badge ' + (isUsed ? 'used' : 'active');
+  badge.textContent = isUsed ? '✕ Cupom Utilizado' : '✓ Cupom Válido';
+
+  document.getElementById('couponDetails').innerHTML = `
+    <div class="meta"><span class="meta-label">Código</span><span class="meta-value" style="letter-spacing:.08em;color:var(--gold);">${c.id}</span></div>
+    <div class="meta"><span class="meta-label">Prêmio</span><span class="meta-value">${icon} ${c.prizeLabel || c.prize}</span></div>
+    <div class="meta"><span class="meta-label">Emitido em</span><span class="meta-value">${c.date ? new Date(c.date).toLocaleDateString('pt-BR') : '—'}</span></div>
+    <div class="meta"><span class="meta-label">Status</span><span class="meta-value">${c.status}</span></div>
+    ${isUsed && c.usedDate ? `<div class="meta"><span class="meta-label">Usado em</span><span class="meta-value">${new Date(c.usedDate).toLocaleDateString('pt-BR')}</span></div>` : ''}
+  `;
+
+  const useBtn = document.getElementById('useBtn');
+  useBtn.style.display = isUsed ? 'none' : 'block';
+  document.getElementById('resultBox').classList.add('visible');
+}
+
+async function useCoupon(){
+  if(!currentCoupon) return;
+  if(!confirm(`Marcar o cupom ${currentCoupon.id} como utilizado?\n\nEsta ação não pode ser desfeita.`)) return;
+
+  const btn = document.getElementById('useBtn');
+  btn.disabled = true; btn.textContent = '⏳ Processando...';
+  const actionMsg = document.getElementById('actionMsg');
+
+  try {
+    let data;
+    if(CONFIG.APPS_SCRIPT_URL === 'SUA_URL_DO_APPS_SCRIPT_AQUI'){
+      data = { success: true };
+    } else {
+      const res = await fetch(CONFIG.APPS_SCRIPT_URL, {
+        method:'POST',
+        body: JSON.stringify({ action:'use', id: currentCoupon.id, password: CONFIG.ADMIN_PASSWORD }),
+      });
+      data = await res.json();
+    }
+
+    if(data.error){ showMsg(actionMsg,'error','❌ ' + data.error); }
+    else {
+      showMsg(actionMsg,'success','✅ Cupom marcado como utilizado com sucesso!');
+      currentCoupon.status = 'USADO';
+      currentCoupon.usedDate = new Date().toISOString();
+      showResult(currentCoupon);
+    }
+  } catch(e){ showMsg(actionMsg,'error','❌ Erro de conexão.'); }
+
+  btn.disabled = false;
+}
+
+function showError(msg){ document.getElementById('resultBox').innerHTML=`<p style="color:#ff6464;">❌ ${msg}</p>`; document.getElementById('resultBox').classList.add('visible'); }
+function showMsg(el, type, text){ el.className = 'msg' + (type ? ' ' + type : ''); el.textContent = text; if(text) el.classList.add('visible'); else el.classList.remove('visible'); }
+</script>
+</body>
+</html>
