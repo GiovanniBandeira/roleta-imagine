@@ -14,6 +14,9 @@ const ADMIN_PASSWORD = 'imagine2024'; // Mude para sua senha
 
 // ── GET: buscar ou salvar cupom ───────────────────────────
 function doGet(e) {
+  // Proteção: evita erro ao testar manualmente no editor
+  if (!e || !e.parameter) return output({ error: 'Sem parâmetros. Use via URL.' });
+
   const action = e.parameter.action;
   const id = e.parameter.id;
 
