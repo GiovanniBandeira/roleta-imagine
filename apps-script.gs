@@ -31,6 +31,12 @@ function doGet(e) {
     return output(saveCoupon(id, prize, prizeLabel));
   }
 
+  // Marcar como usado via GET (chamado com no-cors do browser)
+  if (action === 'use' && id) {
+    const password = e.parameter.password || '';
+    return output(useCoupon(id, password));
+  }
+
   return output({ error: 'Ação inválida' });
 }
 

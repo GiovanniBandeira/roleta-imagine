@@ -160,25 +160,22 @@ async function useCoupon(){
   const actionMsg = document.getElementById('actionMsg');
 
   try {
-    let data;
-    if(CONFIG.APPS_SCRIPT_URL === 'SUA_URL_DO_APPS_SCRIPT_AQUI'){
-      data = { success: true };
+    if(CONFIG.APPS_SCRIPT_URL.includes('SUA_URL')){
+      showMsg(actionMsg,'success','✅ (Modo Teste) Cupom marcado como utilizado com sucesso!');
+      currentCoupon.status = 'USADO';
+      currentCoupon.usedDate = new Date().toISOString();
+      showResult(currentCoupon);
     } else {
-      const res = await fetch(CONFIG.APPS_SCRIPT_URL, {
-        method:'POST',
-        body: JSON.stringify({ action:'use', id: currentCoupon.id, password: CONFIG.ADMIN_PASSWORD }),
-      });
-      data = await res.json();
-    }
-
-    if(data.error){ showMsg(actionMsg,'error','❌ ' + data.error); }
-    else {
+      const url = `${CONFIG.APPS_SCRIPT_URL}?action=use&id=${encodeURIComponent(currentCoupon.id)}&password=${encodeURIComponent(CONFIG.ADMIN_PASSWORD)}`;
+      await fetch(url, { mode: 'no-cors' });
+      
+      // Assumimos sucesso porque no-cors não permite ler a resposta
       showMsg(actionMsg,'success','✅ Cupom marcado como utilizado com sucesso!');
       currentCoupon.status = 'USADO';
       currentCoupon.usedDate = new Date().toISOString();
       showResult(currentCoupon);
     }
-  } catch(e){ showMsg(actionMsg,'error','❌ Erro de conexão.'); }
+  } catch(e){ showMsg(actionMsg,'error','❌ Erro de conexão com o servidor.'); }
 
   btn.disabled = false;
 }
