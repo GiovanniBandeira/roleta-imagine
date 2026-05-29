@@ -8,18 +8,19 @@
   <meta name="description" content="Gire a roleta da Imagine e concorra a prêmios exclusivos!">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
-      --bg: #050510;
-      --purple: #a855f7;
-      --cyan: #00d4ff;
+      --bg: #EBEBEB;
+      --green: #08F868;
+      --dark: #4E4E4E;
+      --white: #FFFFFF;
       --gold: #fbbf24;
-      --glass: rgba(255, 255, 255, 0.05);
-      --border: rgba(255, 255, 255, 0.08);
+      --glass: #FFFFFF;
+      --border: rgba(78, 78, 78, 0.2);
     }
 
     * {
@@ -29,40 +30,57 @@
     }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Bebas Neue', sans-serif;
       background: var(--bg);
-      color: #fff;
+      color: var(--dark);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* STARS */
-    #stars {
+    /* STARS CANVAS */
+    #starsCanvas {
       position: fixed;
       inset: 0;
+      width: 100%;
+      height: 100%;
       z-index: 0;
-      overflow: hidden;
       pointer-events: none;
     }
 
-    .star {
-      position: absolute;
-      border-radius: 50%;
-      background: #fff;
-      animation: twinkle var(--d, 3s) ease-in-out infinite;
+    /* FLOATING IMAGES */
+    .floating-side-img {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15vw;
+      max-width: 160px;
+      min-width: 60px;
+      z-index: 0;
+      opacity: 0.9;
+      animation: floatImg 6s ease-in-out infinite alternate;
+      pointer-events: none;
+      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15));
     }
 
-    @keyframes twinkle {
+    .floating-side-img.left {
+      left: 5%;
+    }
 
-      0%,
-      100% {
-        opacity: .2;
-        transform: scale(1);
+    .floating-side-img.right {
+      right: 5%;
+      animation-delay: -3s;
+      /* Ajuste manual de tamanho para compensar a borda transparente do PNG */
+      width: 30vw;
+      max-width: 340px;
+    }
+
+    @keyframes floatImg {
+      0% {
+        transform: translateY(-50%) rotate(-3deg);
       }
 
-      50% {
-        opacity: 1;
-        transform: scale(1.3);
+      100% {
+        transform: translateY(-55%) rotate(3deg);
       }
     }
 
@@ -93,15 +111,7 @@
 
     .logo img {
       height: 40px;
-      filter: drop-shadow(0 0 12px var(--purple));
-    }
-
-    .logo-text {
-      font-size: 1.6rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(8, 248, 104, 0.4));
     }
 
     /* HERO */
@@ -111,18 +121,18 @@
     }
 
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--purple) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 400;
+      color: var(--dark);
       line-height: 1.1;
+      letter-spacing: 2px;
     }
 
     .hero p {
       margin-top: .75rem;
-      color: rgba(255, 255, 255, .6);
-      font-size: 1.1rem;
+      color: var(--dark);
+      font-size: 1.2rem;
+      font-family: 'Outfit', sans-serif;
     }
 
     /* WHEEL SECTION */
@@ -142,7 +152,7 @@
 
     #wheelCanvas {
       display: block;
-      filter: drop-shadow(0 0 30px rgba(168, 85, 247, .4));
+      filter: drop-shadow(0 0 30px rgba(8, 248, 104, 0.4));
     }
 
     .pointer {
@@ -163,23 +173,21 @@
     .spin-btn {
       position: relative;
       padding: 1rem 3rem;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--dark);
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
-      box-shadow: 0 0 30px rgba(168, 85, 247, .5);
+      background: var(--green);
+      box-shadow: 0 0 30px rgba(8, 248, 104, 0.5);
       transition: .3s;
-      letter-spacing: .05em;
-      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
     .spin-btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 50px rgba(168, 85, 247, .8);
+      box-shadow: 0 0 50px rgba(8, 248, 104, 0.8);
     }
 
     .spin-btn:disabled {
@@ -193,7 +201,7 @@
       position: absolute;
       inset: -3px;
       border-radius: 53px;
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      background: var(--green);
       z-index: -1;
       filter: blur(10px);
       opacity: .6;
@@ -201,17 +209,19 @@
 
     /* PRIZES LIST */
     .prizes-list {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
       padding: 0 1rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .prize-card {
       background: var(--glass);
-      border: 1px solid var(--border);
+      border: 2px solid var(--green);
       border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       padding: 1rem 1.5rem;
       text-align: center;
       backdrop-filter: blur(10px);
@@ -223,14 +233,17 @@
     }
 
     .prize-card .name {
-      font-size: .9rem;
+      font-size: 1.1rem;
       font-weight: 600;
+      color: var(--dark);
+      font-family: 'Outfit', sans-serif;
       margin-top: .3rem;
     }
 
     .prize-card .prob {
-      font-size: .75rem;
-      color: rgba(255, 255, 255, .4);
+      font-size: .85rem;
+      color: var(--dark);
+      font-family: 'Outfit', sans-serif;
       margin-top: .2rem;
     }
 
@@ -252,13 +265,15 @@
 
     /* PRIZE MODAL */
     .prize-modal {
-      background: linear-gradient(145deg, #0d0d2b, #1a0a3a);
-      border: 1px solid rgba(168, 85, 247, .3);
+      background: var(--white);
+      border: 3px solid var(--green);
       border-radius: 24px;
       padding: 2.5rem;
       text-align: center;
       max-width: 420px;
       width: 90%;
+      color: var(--dark);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
       animation: popIn .5s cubic-bezier(.34, 1.56, .64, 1);
     }
 
@@ -291,31 +306,29 @@
     }
 
     .prize-modal h2 {
-      font-size: 1.3rem;
-      color: var(--cyan);
+      font-size: 1.5rem;
+      color: var(--dark);
       margin: .5rem 0;
     }
 
     .prize-modal .prize-name {
-      font-size: 2rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--green);
+      letter-spacing: 1px;
     }
 
     .modal-btn {
       margin-top: 1.5rem;
       padding: .9rem 2.5rem;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
-      color: #fff;
-      box-shadow: 0 0 25px rgba(168, 85, 247, .5);
+      background: var(--green);
+      color: var(--dark);
+      box-shadow: 0 0 25px rgba(8, 248, 104, 0.5);
       transition: .2s;
     }
 
@@ -380,14 +393,14 @@
     }
 
     .action-btn.primary {
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
-      color: #fff;
+      background: var(--green);
+      color: var(--dark);
     }
 
     .action-btn.secondary {
-      background: var(--glass);
-      border: 1px solid var(--border);
-      color: #fff;
+      background: var(--white);
+      border: 2px solid var(--green);
+      color: var(--dark);
     }
 
     .action-btn:hover {
@@ -396,15 +409,16 @@
 
     /* TICKET DESIGN */
     #ticket {
-      background: linear-gradient(145deg, #0a0a1f, #12062a);
-      border: 1px solid rgba(168, 85, 247, .4);
+      background: var(--white);
+      border: 3px solid var(--green);
       border-radius: 20px;
       overflow: hidden;
       font-family: 'Outfit', sans-serif;
+      color: var(--dark);
     }
 
     .ticket-header {
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      background: var(--green);
       padding: 1.2rem 1.5rem;
       display: flex;
       align-items: center;
@@ -412,19 +426,19 @@
     }
 
     .ticket-header .t-logo {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: .05em;
+      font-size: 1.8rem;
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--dark);
+      letter-spacing: 2px;
     }
 
     .ticket-header .t-badge {
-      background: rgba(255, 255, 255, .2);
+      background: var(--white);
       padding: .3rem .8rem;
       border-radius: 20px;
       font-size: .75rem;
-      font-weight: 600;
-      color: #fff;
+      font-weight: 700;
+      color: var(--dark);
     }
 
     .ticket-body {
@@ -439,17 +453,16 @@
 
     .ticket-prize-name {
       text-align: center;
-      font-size: 1.6rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--green);
       margin: .5rem 0;
+      letter-spacing: 1px;
     }
 
     .ticket-divider {
       border: none;
-      border-top: 2px dashed rgba(255, 255, 255, .15);
+      border-top: 2px dashed rgba(78, 78, 78, .15);
       margin: 1rem 0;
     }
 
@@ -466,7 +479,8 @@
 
     .ticket-meta .label {
       font-size: .7rem;
-      color: rgba(255, 255, 255, .4);
+      color: var(--dark);
+      opacity: 0.6;
       text-transform: uppercase;
       letter-spacing: .08em;
     }
@@ -474,7 +488,7 @@
     .ticket-meta .value {
       font-size: .95rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--dark);
       margin-top: .15rem;
     }
 
@@ -496,11 +510,12 @@
     }
 
     .ticket-footer {
-      background: rgba(168, 85, 247, .08);
+      background: rgba(8, 248, 104, .1);
       padding: .75rem 1.5rem;
       text-align: center;
       font-size: .7rem;
-      color: rgba(255, 255, 255, .35);
+      color: var(--dark);
+      opacity: 0.8;
     }
 
     /* CONFETTI */
@@ -514,16 +529,31 @@
 
     /* STATUS BADGE */
     .status-active {
-      background: rgba(0, 212, 255, .15);
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
+      background: rgba(8, 248, 104, .15);
+      border: 1px solid var(--green);
+      color: var(--green);
       padding: .25rem .75rem;
       border-radius: 20px;
       font-size: .8rem;
       font-weight: 600;
     }
 
-    @media(max-width:480px) {
+    @media(max-width: 1000px) {
+      .floating-side-img {
+        opacity: 0.2;
+        width: 10vw;
+      }
+
+      .floating-side-img.right {
+        width: 18vw;
+      }
+    }
+
+    @media(max-width:600px) {
+      .prizes-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       .wheel-wrap {
         width: 320px;
         height: 320px;
@@ -538,14 +568,16 @@
 </head>
 
 <body>
-  <div id="stars"></div>
+  <canvas id="starsCanvas"></canvas>
+  <img src="LogoVerde3.0.png" class="floating-side-img left" alt="Imagine Logo">
+  <img src="Olho_Prata-removebg-preview.png" class="floating-side-img right" alt="ArtMinha Logo">
+
   <canvas id="confetti-canvas"></canvas>
 
   <div class="page">
     <header>
       <div class="logo">
-        <img src="logo.png" alt="Imagine" onerror="this.style.display='none'">
-        <span class="logo-text">Imagine</span>
+        <img src="logoVerde3.0.png" alt="Imagine" onerror="this.style.display='none'">
       </div>
     </header>
 
@@ -560,24 +592,16 @@
         <canvas id="wheelCanvas" width="420" height="420"></canvas>
       </div>
       <button class="spin-btn" id="spinBtn" onclick="spin()">✨ GIRAR ROLETA</button>
+
+      <label
+        style="margin-top: 0.5rem; color: var(--dark); opacity: 0.8; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-family: 'Outfit', sans-serif; font-weight: 500;">
+        <input type="checkbox" id="noKeychainsCheckbox" onchange="toggleKeychains()">
+        Chaveiros esgotados (Substituir por 25% OFF)
+      </label>
     </div>
 
-    <div class="prizes-list">
-      <div class="prize-card">
-        <div class="icon">🏷️</div>
-        <div class="name">10% de Desconto</div>
-        <div class="prob">49,5% de chance</div>
-      </div>
-      <div class="prize-card">
-        <div class="icon">🔑</div>
-        <div class="name">Chaveiro Imagine</div>
-        <div class="prob">49,5% de chance</div>
-      </div>
-      <div class="prize-card" style="border-color:rgba(251,191,36,.3);">
-        <div class="icon">⭐</div>
-        <div class="name" style="color:var(--gold);">50% no Projeto</div>
-        <div class="prob">1% de chance</div>
-      </div>
+    <div class="prizes-list" id="prizesList">
+      <!-- Generated dynamically -->
     </div>
   </div>
 
@@ -587,7 +611,8 @@
       <span class="prize-icon" id="prizeIcon"></span>
       <h2>🎉 Você ganhou!</h2>
       <div class="prize-name" id="prizeName"></div>
-      <p id="prizeSubtitle" style="color:rgba(255,255,255,.6);margin-top:.5rem;font-size:.9rem;"></p>
+      <p id="prizeSubtitle"
+        style="color:var(--dark); opacity:0.7; margin-top:.5rem; font-size:1rem; font-family:'Outfit',sans-serif;"></p>
       <button class="modal-btn" id="prizeActionBtn"></button>
     </div>
   </div>
@@ -642,39 +667,152 @@
       COUPON_BASE_URL: window.location.origin + '/cupom.html',
     };
 
-    // ── PRIZES ────────────────────────────────────────────────
-    const PRIZES = {
-      desconto10: { label: '10% de Desconto', icon: '🏷️', color1: '#1a4a7a', color2: '#00d4ff', prob: 49.5 },
-      chaveiro: { label: 'Chaveiro Imagine', icon: '🔑', color1: '#3a1a7a', color2: '#a855f7', prob: 49.5 },
-      desconto50: { label: '50% no Projeto', icon: '⭐', color1: '#5a3a00', color2: '#fbbf24', prob: 1 },
+    const logoImg = new Image();
+    logoImg.src = 'logoVerde3.0.png';
+
+    let idleReq;
+    function idleLoop() {
+      if (!isSpinning) {
+        currentRotation += 0.0015;
+        drawWheel(currentRotation);
+      }
+      idleReq = requestAnimationFrame(idleLoop);
+    }
+
+    logoImg.onload = () => {
+      if (!isSpinning) {
+        drawWheel(currentRotation);
+        idleLoop();
+      }
     };
 
-    // 7 segments: 1x desconto50, 3x desconto10, 3x chaveiro
-    const SEGMENTS = [
+    // ── PRIZES ────────────────────────────────────────────────
+    const PRIZES = {
+      desconto5: { label: '5% de Desconto', icon: '🏷️', color1: '#EBEBEB', color2: '#FFFFFF', prob: 20 },
+      desconto10: { label: '10% de Desconto', icon: '🏷️', color1: '#EBEBEB', color2: '#FFFFFF', prob: 20 },
+      desconto15: { label: '15% de Desconto', icon: '🏷️', color1: '#EBEBEB', color2: '#FFFFFF', prob: 20 },
+      chaveiro: { label: 'Chaveiro Imagine', icon: '🔑', color1: '#4E4E4E', color2: '#4E4E4E', prob: 9 },
+      desconto25: { label: '25% de Desconto', icon: '🏷️', color1: '#08F868', color2: '#08F868', prob: 9 },
+      perdeu_vez: { label: 'Perdeu a vez', icon: '😢', color1: '#4E4E4E', color2: '#4E4E4E', prob: 25 },
+      tente_denovo: { label: 'Tente de novo', icon: '🔄', color1: '#08F868', color2: '#08F868', prob: 25 },
+      desconto50: { label: '50% no Projeto', icon: '⭐', color1: '#fbbf24', color2: '#fbbf24', prob: 1 },
+    };
+
+    let activeKeychains = true;
+
+    let SEGMENTS = [
+      'tente_denovo',
       'desconto50',
-      'desconto10', 'chaveiro',
-      'desconto10', 'chaveiro',
-      'desconto10', 'chaveiro',
+      'perdeu_vez',
+      'desconto5',
+      'desconto10',
+      'desconto15',
+      'chaveiro',
+      'desconto10'
     ];
 
-    // ── STARS ─────────────────────────────────────────────────
-    (function createStars() {
-      const c = document.getElementById('stars');
-      for (let i = 0; i < 120; i++) {
-        const s = document.createElement('div');
-        s.className = 'star';
-        const sz = Math.random() * 2.5 + .5;
-        s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random() * 100}%;left:${Math.random() * 100}%;--d:${(Math.random() * 4 + 2).toFixed(1)}s;animation-delay:${(Math.random() * 5).toFixed(1)}s;opacity:${Math.random() * .5 + .1}`;
-        c.appendChild(s);
+    function toggleKeychains() {
+      activeKeychains = !document.getElementById('noKeychainsCheckbox').checked;
+      updateSegmentsAndPrizes();
+    }
+
+    function updateSegmentsAndPrizes() {
+      SEGMENTS = [
+        'perdeu_vez',
+        'desconto50',
+        'tente_denovo',
+        'desconto10',
+        'desconto5',
+        activeKeychains ? 'chaveiro' : 'desconto25',
+        'tente_denovo',
+        'desconto10',
+        'desconto15'
+      ];
+      drawWheel(0);
+      renderPrizesList();
+    }
+
+    function renderPrizesList() {
+      const list = document.getElementById('prizesList');
+      const activeIds = ['desconto5', 'desconto10', 'desconto15', activeKeychains ? 'chaveiro' : 'desconto25', 'perdeu_vez', 'tente_denovo', 'desconto50'];
+      list.innerHTML = activeIds.map(id => {
+        const p = PRIZES[id];
+        const extraStyle = id === 'desconto50' ? 'style="border-color:rgba(251,191,36,.3);"' : '';
+        const nameStyle = id === 'desconto50' ? 'style="color:var(--gold);"' : '';
+        return `
+          <div class="prize-card" ${extraStyle}>
+            <div class="icon">${p.icon}</div>
+            <div class="name" ${nameStyle}>${p.label}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── INTERACTIVE DOTS BACKGROUND ───────────────────────────
+    const bgCanvas = document.getElementById('starsCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    let bgWidth, bgHeight, particles = [];
+    let mouse = { x: null, y: null, radius: 120 };
+
+    window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+    window.addEventListener('mouseleave', () => { mouse.x = undefined; mouse.y = undefined; });
+
+    function initBg() {
+      bgWidth = bgCanvas.width = window.innerWidth;
+      bgHeight = bgCanvas.height = window.innerHeight;
+      particles = [];
+      const numParticles = (bgWidth * bgHeight) / 12000;
+      for (let i = 0; i < numParticles; i++) {
+        particles.push({
+          x: Math.random() * bgWidth,
+          y: Math.random() * bgHeight,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 2 + 1
+        });
       }
-    })();
+    }
+
+    function animateBg() {
+      bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+      bgCtx.fillStyle = 'rgba(78, 78, 78, 0.4)';
+
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > bgWidth) p.vx *= -1;
+        if (p.y < 0 || p.y > bgHeight) p.vy *= -1;
+
+        if (mouse.x != null) {
+          let dx = mouse.x - p.x, dy = mouse.y - p.y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius) {
+            p.x -= dx * 0.03; p.y -= dy * 0.03;
+          }
+        }
+        bgCtx.beginPath(); bgCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2); bgCtx.fill();
+      });
+
+      bgCtx.strokeStyle = 'rgba(78, 78, 78, 0.15)';
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i; j < particles.length; j++) {
+          let dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+          let dist = dx * dx + dy * dy;
+          if (dist < 12000) {
+            bgCtx.beginPath(); bgCtx.moveTo(particles[i].x, particles[i].y); bgCtx.lineTo(particles[j].x, particles[j].y); bgCtx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateBg);
+    }
+
+    window.addEventListener('resize', initBg);
+    initBg(); animateBg();
 
     // ── WHEEL CANVAS ──────────────────────────────────────────
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const CX = canvas.width / 2, CY = canvas.height / 2;
     const R = CX - 18;
-    const SEG_ANGLE = (2 * Math.PI) / 7;
 
     let currentRotation = 0;
     let isSpinning = false;
@@ -685,11 +823,12 @@
 
       // Outer glow ring
       const grd = ctx.createRadialGradient(CX, CY, R - 8, CX, CY, R + 12);
-      grd.addColorStop(0, 'rgba(168,85,247,0.6)');
-      grd.addColorStop(1, 'rgba(168,85,247,0)');
+      grd.addColorStop(0, 'rgba(8,248,104,0.6)');
+      grd.addColorStop(1, 'rgba(8,248,104,0)');
       ctx.beginPath(); ctx.arc(CX, CY, R + 10, 0, 2 * Math.PI);
       ctx.fillStyle = grd; ctx.fill();
 
+      const SEG_ANGLE = (2 * Math.PI) / SEGMENTS.length;
       // Segments
       SEGMENTS.forEach((pid, i) => {
         const p = PRIZES[pid];
@@ -735,34 +874,51 @@
         ctx.save();
         ctx.translate(lx, ly);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.85)';
-        ctx.font = `bold ${canvas.width < 380 ? '8' : '10'}px Outfit,sans-serif`;
+        ctx.fillStyle = (p.color1 === '#EBEBEB' || p.color1 === '#08F868' || p.color1 === '#fbbf24') ? '#4E4E4E' : '#FFFFFF';
+        ctx.font = `18px "Bebas Neue", sans-serif`;
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        const short = pid === 'desconto10' ? '10% OFF' : pid === 'chaveiro' ? 'Chaveiro' : '50% OFF';
+        const short = pid.startsWith('desconto') ? pid.replace('desconto', '') + '% OFF' : p.label.split(' ')[0];
         ctx.fillText(short, 0, 0);
         ctx.restore();
       });
 
       // Center hub
       const hub = ctx.createRadialGradient(CX, CY, 0, CX, CY, 38);
-      hub.addColorStop(0, '#1a0a3a'); hub.addColorStop(1, '#050510');
+      hub.addColorStop(0, '#FFFFFF'); hub.addColorStop(1, '#EBEBEB');
       ctx.beginPath(); ctx.arc(CX, CY, 38, 0, 2 * Math.PI);
       ctx.fillStyle = hub; ctx.fill();
-      ctx.strokeStyle = 'rgba(168,85,247,0.6)'; ctx.lineWidth = 3; ctx.stroke();
+      ctx.strokeStyle = '#08F868'; ctx.lineWidth = 3; ctx.stroke();
 
-      ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Outfit,sans-serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('IMAGINE', CX, CY);
+      if (logoImg.complete && logoImg.naturalHeight !== 0) {
+        const logoW = 50;
+        const logoH = 50;
+        ctx.drawImage(logoImg, CX - logoW / 2, CY - logoH / 2, logoW, logoH);
+      } else {
+        ctx.fillStyle = '#4E4E4E'; ctx.font = 'bold 11px Outfit,sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('IMAGINE', CX, CY);
+      }
     }
 
-    drawWheel(0);
+    updateSegmentsAndPrizes();
 
     // ── WEIGHTED RANDOM ───────────────────────────────────────
     function pickPrize() {
-      const r = Math.random() * 100;
-      if (r < 1) return 'desconto50';
-      if (r < 50.5) return 'desconto10';
-      return 'chaveiro';
+      const activeIds = ['desconto50', 'desconto5', 'desconto10', 'desconto15', activeKeychains ? 'chaveiro' : 'desconto25', 'perdeu_vez', 'tente_denovo'];
+
+      let totalProb = 0;
+      for (let id of activeIds) {
+        if (PRIZES[id]) totalProb += PRIZES[id].prob;
+      }
+
+      let r = Math.random() * totalProb;
+      let accum = 0;
+      for (let id of activeIds) {
+        if (!PRIZES[id]) continue;
+        accum += PRIZES[id].prob;
+        if (r < accum) return id;
+      }
+      return 'desconto10';
     }
 
     // ── SPIN ──────────────────────────────────────────────────
@@ -777,6 +933,7 @@
       const matchIdx = SEGMENTS.map((s, i) => s === winner ? i : null).filter(i => i !== null);
       const targetIdx = matchIdx[Math.floor(Math.random() * matchIdx.length)];
 
+      const SEG_ANGLE = (2 * Math.PI) / SEGMENTS.length;
       // Cálculo correto do ângulo final:
       // Centro do segmento i quando rot=r: r + i*SEG_ANGLE + SEG_ANGLE/2 - π/2
       // Para estar no topo (ponteiro = -π/2): r = -(i + 0.5)*SEG_ANGLE
@@ -791,14 +948,14 @@
       let diff = normalizedTarget - currentNorm;
       if (diff <= 0) diff += TWO_PI;
 
-      const extraSpins = (5 + Math.floor(Math.random() * 4)) * TWO_PI;
+      const extraSpins = (8 + Math.floor(Math.random() * 4)) * TWO_PI;
       const finalRot = currentRotation + extraSpins + diff;
 
-      const duration = 6000;
+      const duration = 8000;
       const startTime = performance.now();
       const startRot = currentRotation;
 
-      function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+      function easeOut(t) { return 1 - Math.pow(1 - t, 5); }
 
       function frame(now) {
         const elapsed = now - startTime;
@@ -825,6 +982,13 @@
         if (winner === 'chaveiro') {
           subtitle.textContent = '🎁 Dirija-se ao balcão para retirar seu Chaveiro Imagine!';
           actionBtn.textContent = '✅ Entendido!';
+          actionBtn.onclick = () => {
+            document.getElementById('prizeOverlay').classList.remove('active');
+            document.getElementById('spinBtn').disabled = false;
+          };
+        } else if (winner === 'perdeu_vez' || winner === 'tente_denovo') {
+          subtitle.textContent = winner === 'perdeu_vez' ? 'Poxa, não foi dessa vez!' : 'Quase! Gire novamente para tentar a sorte!';
+          actionBtn.textContent = '✅ Fechar';
           actionBtn.onclick = () => {
             document.getElementById('prizeOverlay').classList.remove('active');
             document.getElementById('spinBtn').disabled = false;

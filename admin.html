@@ -4,42 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin – Validar Cupom | Imagine</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#050510;--purple:#a855f7;--cyan:#00d4ff;--gold:#fbbf24;}
+:root{--bg:#EBEBEB;--green:#08F868;--dark:#4E4E4E;--white:#FFFFFF;--gold:#fbbf24;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
-.card{background:linear-gradient(145deg,#0d0d2b,#12062a);border:1px solid rgba(168,85,247,.3);border-radius:24px;padding:2rem;max-width:460px;width:100%;}
-h1{font-size:1.4rem;font-weight:800;background:linear-gradient(90deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.25rem;}
-.subtitle{color:rgba(255,255,255,.4);font-size:.85rem;margin-bottom:1.5rem;}
+body{font-family:'Bebas Neue',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+.card{background:var(--white);border:3px solid var(--green);border-radius:24px;padding:2rem;max-width:460px;width:100%;font-family:'Outfit',sans-serif;}
+h1{font-size:1.8rem;font-family:'Bebas Neue',sans-serif;color:var(--green);margin-bottom:.25rem;letter-spacing:1px;}
+.subtitle{color:var(--dark);opacity:0.6;font-size:.85rem;margin-bottom:1.5rem;}
 .field{margin-bottom:1rem;}
-label{display:block;font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;}
-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.85rem 1rem;color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;outline:none;transition:.2s;}
-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(168,85,247,.2);}
-.btn{width:100%;padding:1rem;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.2s;background:linear-gradient(135deg,var(--purple),var(--cyan));color:#fff;margin-top:.5rem;}
-.btn:hover{transform:scale(1.02);box-shadow:0 0 25px rgba(168,85,247,.5);}
+label{display:block;font-size:.8rem;color:var(--dark);opacity:0.8;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;}
+input{width:100%;background:var(--white);border:2px solid rgba(78,78,78,0.2);border-radius:12px;padding:.85rem 1rem;color:var(--dark);font-family:'Outfit',sans-serif;font-size:1rem;outline:none;transition:.2s;}
+input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(8,248,104,.2);}
+.btn{width:100%;padding:1rem;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;cursor:pointer;transition:.2s;background:var(--green);color:var(--dark);margin-top:.5rem;}
+.btn:hover{transform:scale(1.02);box-shadow:0 0 25px rgba(8,248,104,.5);}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
-.btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);}
-.result-box{margin-top:1.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;display:none;}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;}
+.result-box{margin-top:1.5rem;background:var(--white);border:2px solid rgba(78,78,78,0.1);border-radius:16px;padding:1.5rem;display:none;}
 .result-box.visible{display:block;}
 .status-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1.2rem;border-radius:50px;font-weight:700;font-size:.9rem;margin-bottom:1rem;}
-.active{background:rgba(0,212,255,.1);border:2px solid var(--cyan);color:var(--cyan);}
+.active{background:rgba(8,248,104,.15);border:2px solid var(--green);color:var(--green);}
 .used{background:rgba(255,100,100,.1);border:2px solid #ff6464;color:#ff6464;}
-.meta{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.9rem;border-bottom:1px solid rgba(255,255,255,.05);}
+.meta{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.9rem;border-bottom:1px dashed rgba(78,78,78,.15);}
 .meta:last-child{border-bottom:none;}
-.meta-label{color:rgba(255,255,255,.4);}
+.meta-label{color:var(--dark);opacity:0.6;}
 .meta-value{font-weight:700;}
 .msg{margin-top:1rem;padding:.75rem 1rem;border-radius:12px;font-size:.9rem;display:none;}
 .msg.visible{display:block;}
-.msg.success{background:rgba(0,212,255,.1);border:1px solid var(--cyan);color:var(--cyan);}
+.msg.success{background:rgba(8,248,104,.15);border:1px solid var(--green);color:var(--green);}
 .msg.error{background:rgba(255,100,100,.1);border:1px solid #ff6464;color:#ff6464;}
 #loginSection{display:block;}#mainSection{display:none;}
-.logo-text{font-size:1.4rem;font-weight:900;background:linear-gradient(90deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:block;text-align:center;margin-bottom:1.5rem;}
+.logo-text{font-size:1.8rem;font-family:'Bebas Neue',sans-serif;color:var(--dark);letter-spacing:2px;display:block;text-align:center;margin-bottom:1.5rem;}
 </style>
 </head>
 <body>
 <div class="card">
-  <span class="logo-text">✦ IMAGINE – Admin</span>
+  <span class="logo-text">
+    <img src="logoVerde3.0.png" alt="Imagine" style="height:40px; vertical-align:middle; filter:drop-shadow(0 0 8px rgba(8,248,104,0.4)); margin-right:8px;" onerror="this.style.display='none'">
+    ADMIN
+  </span>
 
   <!-- LOGIN -->
   <div id="loginSection">
@@ -69,8 +72,8 @@ input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(168,85,247,.2);
       <button class="btn btn-danger" id="useBtn" onclick="useCoupon()" style="margin-top:1rem;display:none;">✓ Marcar Como Utilizado</button>
     </div>
     <div class="msg" id="actionMsg"></div>
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:1.5rem 0;">
-    <button class="btn" onclick="logout()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);">Sair</button>
+    <hr style="border:none;border-top:1px dashed rgba(78,78,78,.15);margin:1.5rem 0;">
+    <button class="btn" onclick="logout()" style="background:var(--white);border:2px solid var(--dark);color:var(--dark);">Sair</button>
   </div>
 </div>
 
@@ -80,7 +83,7 @@ const CONFIG = {
   ADMIN_PASSWORD: 'imagine2024', // Mude para sua senha
 };
 
-const PRIZE_ICONS = { desconto10:'🏷️', chaveiro:'🔑', desconto50:'⭐' };
+const PRIZE_ICONS = { desconto5:'🏷️', desconto10:'🏷️', desconto15:'🏷️', desconto25:'🏷️', chaveiro:'🔑', desconto50:'⭐' };
 let currentCoupon = null;
 
 function doLogin(){

@@ -11,13 +11,14 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
-      --bg: #050510;
-      --purple: #a855f7;
-      --cyan: #00d4ff;
+      --bg: #EBEBEB;
+      --green: #08F868;
+      --dark: #4E4E4E;
+      --white: #FFFFFF;
       --gold: #fbbf24;
     }
 
@@ -34,9 +35,9 @@
     }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Bebas Neue', sans-serif;
       background: var(--bg);
-      color: #fff;
+      color: var(--dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -55,7 +56,7 @@
     .star {
       position: absolute;
       border-radius: 50%;
-      background: #fff;
+      background: var(--dark);
       animation: twinkle var(--d, 3s) ease-in-out infinite;
     }
 
@@ -84,19 +85,18 @@
 
     /* LOGO */
     .logo {
-      font-size: 1.3rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 1.8rem;
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--dark);
+      letter-spacing: 2px;
       margin-bottom: .25rem;
     }
 
     /* SAVE BANNER — shown immediately on mobile */
     #save-banner {
       width: 100%;
-      background: linear-gradient(135deg, rgba(168, 85, 247, .3), rgba(0, 212, 255, .2));
-      border: 1px solid rgba(168, 85, 247, .4);
+      background: var(--white);
+      border: 2px solid var(--green);
       border-radius: 16px;
       padding: 1rem 1.25rem;
       text-align: center;
@@ -104,23 +104,24 @@
     }
 
     #save-banner p {
-      font-size: .9rem;
-      color: rgba(255, 255, 255, .7);
+      font-size: 1rem;
+      font-family: 'Outfit', sans-serif;
+      color: var(--dark);
       margin-bottom: .75rem;
     }
 
     #auto-save-btn {
       width: 100%;
       padding: .85rem;
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      background: var(--green);
       border: none;
       border-radius: 12px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      color: var(--dark);
       cursor: pointer;
-      box-shadow: 0 0 20px rgba(168, 85, 247, .5);
+      box-shadow: 0 0 20px rgba(8, 248, 104, 0.5);
       animation: pulse 2s ease-in-out infinite;
     }
 
@@ -128,25 +129,27 @@
 
       0%,
       100% {
-        box-shadow: 0 0 20px rgba(168, 85, 247, .5)
+        box-shadow: 0 0 20px rgba(8, 248, 104, 0.5)
       }
 
       50% {
-        box-shadow: 0 0 35px rgba(168, 85, 247, .9)
+        box-shadow: 0 0 35px rgba(8, 248, 104, 0.9)
       }
     }
 
     /* TICKET */
     #ticket {
       width: 100%;
-      background: linear-gradient(145deg, #0a0a1f, #12062a);
-      border: 1px solid rgba(168, 85, 247, .4);
+      background: var(--white);
+      border: 3px solid var(--green);
       border-radius: 20px;
       overflow: hidden;
+      color: var(--dark);
+      font-family: 'Outfit', sans-serif;
     }
 
     .ticket-header {
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      background: var(--green);
       padding: 1.1rem 1.25rem;
       display: flex;
       align-items: center;
@@ -154,19 +157,19 @@
     }
 
     .t-logo {
-      font-size: 1.25rem;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: .05em;
+      font-size: 1.5rem;
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--dark);
+      letter-spacing: 2px;
     }
 
     .t-badge {
-      background: rgba(255, 255, 255, .2);
+      background: var(--white);
       padding: .25rem .75rem;
       border-radius: 20px;
       font-size: .72rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--dark);
     }
 
     .ticket-body {
@@ -192,17 +195,16 @@
 
     .prize-name {
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--green);
+      letter-spacing: 1px;
       margin: .4rem 0 .75rem;
     }
 
     .divider {
       border: none;
-      border-top: 2px dashed rgba(255, 255, 255, .1);
+      border-top: 2px dashed rgba(78, 78, 78, .15);
       margin: .75rem 0;
     }
 
@@ -215,7 +217,8 @@
 
     .info-label {
       font-size: .72rem;
-      color: rgba(255, 255, 255, .4);
+      color: var(--dark);
+      opacity: 0.6;
       text-transform: uppercase;
       letter-spacing: .06em;
     }
@@ -233,9 +236,9 @@
     }
 
     .status-ok {
-      background: rgba(0, 212, 255, .1);
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
+      background: rgba(8, 248, 104, .15);
+      border: 1px solid var(--green);
+      color: var(--green);
       padding: .2rem .7rem;
       border-radius: 20px;
       font-size: .75rem;
@@ -253,11 +256,12 @@
     }
 
     .ticket-footer {
-      background: rgba(168, 85, 247, .06);
+      background: rgba(8, 248, 104, .1);
       padding: .6rem 1.25rem;
       text-align: center;
-      font-size: .65rem;
-      color: rgba(255, 255, 255, .3);
+      font-size: .7rem;
+      color: var(--dark);
+      opacity: 0.8;
       line-height: 1.5;
     }
 
@@ -290,28 +294,30 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
-      color: #fff;
-      box-shadow: 0 0 20px rgba(168, 85, 247, .4);
+      background: var(--green);
+      color: var(--dark);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
     }
 
     .btn-wa {
-      background: rgba(37, 211, 102, .12);
-      border: 1px solid rgba(37, 211, 102, .35);
+      background: var(--white);
+      border: 2px solid #25d366;
       color: #25d366;
     }
 
     .btn-sec {
-      background: rgba(255, 255, 255, .06);
-      border: 1px solid rgba(255, 255, 255, .1);
-      color: rgba(255, 255, 255, .8);
+      background: var(--white);
+      border: 2px solid var(--dark);
+      color: var(--dark);
     }
 
     /* LOADING */
     #loading {
       padding: 3rem 1rem;
       text-align: center;
-      color: rgba(255, 255, 255, .5);
+      color: var(--dark);
       font-size: 1rem;
     }
 
@@ -319,8 +325,8 @@
       display: inline-block;
       width: 32px;
       height: 32px;
-      border: 3px solid rgba(168, 85, 247, .3);
-      border-top-color: var(--purple);
+      border: 3px solid rgba(8, 248, 104, 0.3);
+      border-top-color: var(--green);
       border-radius: 50%;
       animation: spin .8s linear infinite;
       margin-bottom: 1rem;
@@ -334,14 +340,16 @@
 
     /* HINT */
     .hint {
-      font-size: .78rem;
-      color: rgba(255, 255, 255, .3);
+      font-size: .85rem;
+      color: var(--dark);
+      opacity: 0.7;
       text-align: center;
       line-height: 1.6;
     }
 
     .hint b {
-      color: rgba(255, 255, 255, .5);
+      color: var(--dark);
+      opacity: 1;
     }
 
     /* ERROR */
@@ -355,7 +363,9 @@
 <body>
   <div id="stars"></div>
   <div class="page">
-    <span class="logo">✦ IMAGINE</span>
+    <div class="logo" style="display:flex; justify-content:center;">
+      <img src="logoVerde3.0.png" alt="Imagine" style="height:40px; filter:drop-shadow(0 0 8px rgba(8,248,104,0.4));" onerror="this.style.display='none'">
+    </div>
 
     <!-- SAVE BANNER (mobile only) -->
     <div id="save-banner">
@@ -495,7 +505,7 @@
         document.querySelectorAll('.prize-icon').forEach(el => el.style.animation = 'none');
 
         const canvas = await html2canvas(ticket, {
-          backgroundColor: '#0a0a1f', scale: 3, useCORS: true, logging: false,
+          backgroundColor: '#FFFFFF', scale: 3, useCORS: true, logging: false,
           ignoreElements: el => el.id === 'stars'
         });
 
